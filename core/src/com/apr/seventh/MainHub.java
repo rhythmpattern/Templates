@@ -32,7 +32,7 @@ public class MainHub {
     }
     public void update()
     {
-
+        collection.update();
     }
     public void dispose()
     {

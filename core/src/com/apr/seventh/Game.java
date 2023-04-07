@@ -26,6 +26,6 @@ public class Game implements Collection {
         levels.get(level - 1).create(this);
 
     }
-    public void update() {}
+    public void update() {levels.get(level - 1).update();}
     public void dispose() {}
 }
