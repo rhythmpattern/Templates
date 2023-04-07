@@ -23,7 +23,7 @@ public class Menu implements Collection{
 
     @Override
     public void SetHub(MainHub hub) {mainHub = hub;}
-
+    public void Next(){}
     public void update() {}
     public void dispose() {}
 }

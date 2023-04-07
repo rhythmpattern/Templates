@@ -6,7 +6,7 @@ public interface Collection {
     public void create() ;
     public void SetHub(MainHub hub);
     public void update();
-
+    public void Next();
     public void dispose();
 
 }
