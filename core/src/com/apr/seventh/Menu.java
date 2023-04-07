@@ -1,6 +1,7 @@
 package com.apr.seventh;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Timer;
@@ -11,19 +12,18 @@ public class Menu implements Collection{
     @Override
     public void create() {
         Gdx.app.log("","Created Menu");
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
 
-            @Override
-            public void run() {
-               mainHub.ShowGame();
-            }
-        }, 3000);
     }
 
     @Override
     public void SetHub(MainHub hub) {mainHub = hub;}
     public void Next(){}
-    public void update() {}
+    public void update()
+    {
+        if (Gdx.input.isKeyPressed(Input.Keys.A))
+        {
+            mainHub.ShowGame();
+        }
+    }
     public void dispose() {}
 }

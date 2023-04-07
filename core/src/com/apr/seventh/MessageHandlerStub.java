@@ -6,7 +6,7 @@ public abstract class MessageHandlerStub implements MessageHandler{
     public void Subscribe(Messenger object)
     {
     }
-    public void Subscribe(Action action)
+    public void Subscribe(String name, ActionData actionData)
     {
     }
     public void PostMessage(String message){}
@@ -14,5 +14,4 @@ public abstract class MessageHandlerStub implements MessageHandler{
     public void PostMessageByString(String message) {
     }
 
-    public abstract void Subscribe(String name, Action action);
 }
