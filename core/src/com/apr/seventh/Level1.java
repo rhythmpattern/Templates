@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class Level1 implements Level,Messenger{
+public class Level1 implements Level{
+    private ActionMessageHandler mh;
+    private Action walk = new WalkAction();
     public Level1(){}
-    public void create() {}
+    public void create() {walk.invoke();}
     public void update() {}
     public void dispose() {}
     public void CalledFunction() {

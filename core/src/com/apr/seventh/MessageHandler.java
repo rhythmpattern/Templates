@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 
 public interface MessageHandler{
     public void Subscribe(Messenger object);
+    public void Subscribe(Action action);
     public void PostMessage(String message);
 
     public void PostMessageByString(String message);
