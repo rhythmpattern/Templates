@@ -11,7 +11,7 @@ public class Level1 implements Level,Messenger{
     public void dispose() {}
     public void CalledFunction() {
         Gdx.app.log("debug","CALLED FUNCTION");}
-    public void CallFunction(String name) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void CallFunction(String name) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
         this.getClass().getDeclaredMethod(name).invoke(this);
     }
