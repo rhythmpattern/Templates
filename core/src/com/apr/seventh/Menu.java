@@ -2,9 +2,9 @@ package com.apr.seventh;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.utils.Timer;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Timer;
 import java.util.TimerTask;
 
 public class Menu implements Collection{
@@ -12,7 +12,15 @@ public class Menu implements Collection{
     @Override
     public void create() {
         Gdx.app.log("","Created Menu");
+        Timer timer = new Timer();
+        timer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                Gdx.app.log("","Delayed Timer");
+            }
 
+        },3.0f);
+        timer.start();
     }
 
     @Override

@@ -13,7 +13,7 @@ public class MainHub {
         if ((collection == null) || collection != null && collection.getClass() != Game.class)
         {
             if (collection != null)
-            collection.dispose();
+                collection.dispose();
             collection = new Game();
             collection.create();
 
