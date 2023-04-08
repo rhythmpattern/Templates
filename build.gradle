@@ -100,6 +100,7 @@ project(":html") {
         api "com.badlogicgames.gdx-controllers:gdx-controllers-gwt:$gdxControllersVersion:sources"
         implementation "com.esotericsoftware.spine:spine-libgdx:4.1.0:sources"
         implementation "org.mini2Dx:universal-tween-engine:6.3.3:sources"
+        implementation "com.bladecoder.ink:blade-ink:1.0.0:sources"
     }
 }
 
@@ -114,6 +115,6 @@ project(":core") {
         api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
         implementation "com.esotericsoftware.spine:spine-libgdx:4.1.0"
         implementation "org.mini2Dx:universal-tween-engine:6.3.3"
-
+        implementation "com.bladecoder.ink:blade-ink:1.0.0"
     }
 }

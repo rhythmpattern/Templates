@@ -4,4 +4,5 @@
 	<source path="com/apr/seventh" />
 	<inherits name="com.esotericsoftware.spine" />
 	<inherits name='aurelienribon.tweenengine' />
+	<inherits name="com.bladecoder.ink" />
 </module>

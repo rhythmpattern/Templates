@@ -3,6 +3,7 @@ package com.apr.seventh;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.bladecoder.ink.runtime.Story;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Timer;
@@ -12,6 +13,7 @@ import aurelienribon.tweenengine.Tween;
 
 public class Level1 implements Level{
     private Collection game = null;
+    Story story;
     Tween tween;
     private ActionMessageHandler mh = new ActionMessageHandler();
     private Action walk = new WalkAction();
