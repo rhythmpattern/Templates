@@ -8,9 +8,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import aurelienribon.tweenengine.Tween;
+
 public class Level1 implements Level{
     private Collection game = null;
-
+    Tween tween;
     private ActionMessageHandler mh = new ActionMessageHandler();
     private Action walk = new WalkAction();
     public ActionData aData = new ActionData(hashCode(),walk);

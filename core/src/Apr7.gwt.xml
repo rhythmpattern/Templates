@@ -3,4 +3,5 @@
 <module>
 	<source path="com/apr/seventh" />
 	<inherits name="com.esotericsoftware.spine" />
+	<inherits name='aurelienribon.tweenengine' />
 </module>
