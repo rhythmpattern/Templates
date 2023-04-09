@@ -17,9 +17,10 @@ public class Menu implements Collection{
             @Override
             public void run() {
                 Gdx.app.log("","Delayed Timer");
+                mainHub.ShowGame();
             }
 
-        },3.0f);
+        },1.0f);
         timer.start();
     }
 
@@ -30,7 +31,7 @@ public class Menu implements Collection{
     {
         if (Gdx.input.isKeyPressed(Input.Keys.A))
         {
-            mainHub.ShowGame();
+
         }
     }
     public void dispose() {}

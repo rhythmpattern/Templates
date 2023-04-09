@@ -3,6 +3,12 @@ package com.apr.seventh;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.bladecoder.ink.runtime.Story;
 
 import java.lang.reflect.InvocationTargetException;
@@ -13,6 +19,11 @@ import aurelienribon.tweenengine.Tween;
 
 public class Level1 implements Level{
     private Collection game = null;
+    private OrthographicCamera camera;
+    private TiledMap map;
+    private TmxMapLoader loader;
+    private OrthogonalTiledMapRenderer renderer;
+    private Vector2 direction;
     Story story;
     Tween tween;
     private ActionMessageHandler mh = new ActionMessageHandler();
@@ -23,22 +34,24 @@ public class Level1 implements Level{
 
     }
     public void create(Collection bigGame) {
+        camera = new OrthographicCamera(21f*30f,21*20);
         Gdx.app.log("debug","CREATED LEVEL1");
         game = bigGame;
         mh.Subscribe("start",aData);
         mh.PostMessage("start");
-        /*Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                game.Next();
-            }
-        }, 3000);walk.invoke();}*/
+        loader = new TmxMapLoader();
+        map = loader.load("level1.tmx");
+        renderer = new OrthogonalTiledMapRenderer(map);
+        renderer.setView(camera);
+        direction = new Vector2();
     }
 
     public void update()
     {
+        camera.update();
+        Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        renderer.render();
         boolean isPressed = Gdx.input.isKeyPressed(Input.Keys.D);
         if (isPressed)
         {
