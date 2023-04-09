@@ -9,6 +9,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
+		config.setWindowedMode(960,640);
 		config.setTitle("Apr7");
 		new Lwjgl3Application(new Apr7(), config);
 	}

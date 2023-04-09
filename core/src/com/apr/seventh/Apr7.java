@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import java.lang.reflect.InvocationTargetException;
 
 public class Apr7 extends ApplicationAdapter {
+	static final int TILE_SIZE = 21;
 	private MainHub mainHub = new MainHub();
 	@Override
 	public void create () {

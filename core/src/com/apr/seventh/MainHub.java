@@ -5,7 +5,7 @@ public class MainHub {
 
     public void create()
     {
-        ShowMenu();
+        ShowGame();
     }
 
     public void ShowGame()

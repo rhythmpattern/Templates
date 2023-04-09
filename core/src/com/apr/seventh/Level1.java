@@ -5,6 +5,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -31,8 +34,15 @@ public class Level1 implements Level{
     private OrthogonalTiledMapRenderer renderer;
     private Vector2 direction;
 
+    private Player player;
+
+    private SpriteBatch spriteBatch;
+
     private int width = 21*16;
     private int height = 21*16;
+
+    static final int WORLD_WIDTH = 100;
+    static final int WORLD_HEIGHT = 100;
     Story story;
     Tween tween;
     private ActionMessageHandler mh = new ActionMessageHandler();
@@ -43,12 +53,16 @@ public class Level1 implements Level{
 
     }
     public void create(Collection bigGame) {
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+        camera = new OrthographicCamera(30,30*(h/w));
+        camera.position.x = 315;
+        camera.position.y = 210;
+        camera.zoom = 20;
+        camera.update();
+        spriteBatch = new SpriteBatch();
 
-        camera = new OrthographicCamera(21f*16f,21*16);
-        viewport = new ExtendViewport(200,200,camera);
 
-        camera.position.x += 200;
-        camera.position.y += 200;
         Gdx.app.log("debug","CREATED LEVEL1");
         game = bigGame;
         mh.Subscribe("start",aData);
@@ -58,13 +72,22 @@ public class Level1 implements Level{
         renderer = new OrthogonalTiledMapRenderer(map);
         renderer.setView(camera);
         direction = new Vector2();
+        MapObjects objects = map.getLayers().get("GameObjects").getObjects();
+        for (MapObject object : objects)
+        {
+            if (object.getName().equals("player"))
+            {
+                player = new Player(spriteBatch);
+            }
+        }
     }
 
     public void update()
     {
 
-        camera.update();
-        viewport.update(width,height);
+
+
+      //  viewport.update(width,height);
         boolean isPressed = Gdx.input.isKeyPressed(Input.Keys.D);
         if (isPressed)
         {
@@ -73,14 +96,25 @@ public class Level1 implements Level{
     }
     public void render()
     {
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
         Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderer.setView(camera);
+        camera.update();
+        spriteBatch.setProjectionMatrix(camera.combined);
         renderer.render();
+        spriteBatch.begin();
+        player.draw();
+        spriteBatch.end();
     }
     public void resize(int width, int height)
     {
-        width = width; height = height;
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+       // width = width; height = height;
+        camera.viewportHeight = 30f*(h/w);
+        camera.viewportWidth = 30;
     }
     public void dispose() {}
     public void CalledFunction() {
