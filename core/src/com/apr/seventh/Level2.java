@@ -15,6 +15,14 @@ public class Level2 implements Level{
     public void update() {
 
     }
+    public void resize(int width, int height)
+    {
+
+    }
+    public void render()
+    {
+
+    }
 
     @Override
     public void dispose() {

@@ -27,5 +27,12 @@ public class Game implements Collection {
 
     }
     public void update() {levels.get(level - 1).update();}
+    public void render() {
+        levels.get(level - 1).render();
+    }
+    public void resize(int width, int height)
+    {
+        levels.get(level - 1).resize(width,height);
+    }
     public void dispose() {}
 }

@@ -34,6 +34,14 @@ public class MainHub {
     {
         collection.update();
     }
+    public void render()
+    {
+        collection.render();
+    }
+    public void resize(int width, int height)
+    {
+        collection.resize(width,height);
+    }
     public void dispose()
     {
 

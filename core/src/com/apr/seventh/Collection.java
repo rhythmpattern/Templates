@@ -7,6 +7,8 @@ public interface Collection {
     public void SetHub(MainHub hub);
     public void update();
     public void Next();
+    public void render();
+    public void resize(int width, int height);
     public void dispose();
 
 }

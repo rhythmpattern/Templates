@@ -9,6 +9,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bladecoder.ink.runtime.Story;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,6 +23,8 @@ import aurelienribon.tweenengine.Tween;
 public class Level1 implements Level{
     private Collection game = null;
     private OrthographicCamera camera;
+
+    Viewport viewport;
     private TiledMap map;
     private TmxMapLoader loader;
     private OrthogonalTiledMapRenderer renderer;
@@ -34,7 +39,10 @@ public class Level1 implements Level{
 
     }
     public void create(Collection bigGame) {
-        camera = new OrthographicCamera(21f*30f,21*20);
+        viewport = new ScreenViewport(camera);
+        camera = new OrthographicCamera(21f*16f,21*16);
+        camera.position.x += 200;
+        camera.position.y += 200;
         Gdx.app.log("debug","CREATED LEVEL1");
         game = bigGame;
         mh.Subscribe("start",aData);
@@ -49,14 +57,23 @@ public class Level1 implements Level{
     public void update()
     {
         camera.update();
-        Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        renderer.render();
+
         boolean isPressed = Gdx.input.isKeyPressed(Input.Keys.D);
         if (isPressed)
         {
             game.Next();
         }
+    }
+    public void render()
+    {
+        Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        renderer.setView(camera);
+        renderer.render();
+    }
+    public void resize(int width, int height)
+    {
+
     }
     public void dispose() {}
     public void CalledFunction() {
