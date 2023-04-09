@@ -11,28 +11,40 @@ public class Game implements Collection {
     public MainHub mainHub = null;
     Level level1 = new Level1();
     Level level2 = new Level2();
-    public void SetHub(MainHub hub) {mainHub = hub;}
-    public void create()
-    {
-        Gdx.app.log("debug", "Created Game");
-       levels.add(level1);
-       levels.add(level2);
-       levels.get(level - 1).create(this);
+
+    public void SetHub(MainHub hub) {
+        mainHub = hub;
     }
-    public void Next()
-    {
+
+    public void create() {
+        Gdx.app.log("debug", "Created Game");
+        levels.add(level1);
+        levels.add(level2);
+        levels.get(level - 1).create(this);
+    }
+
+    public void Next() {
         levels.get(level - 1).dispose();
-        level +=1 ;
+        level += 1;
         levels.get(level - 1).create(this);
 
     }
-    public void update() {levels.get(level - 1).update();}
+
+    public void update() {
+        levels.get(level - 1).update();
+    }
+
     public void render() {
         levels.get(level - 1).render();
     }
-    public void resize(int width, int height)
-    {
-        levels.get(level - 1).resize(width,height);
+
+    public void resize(int width, int height) {
+        levels.get(level - 1).resize(width, height);
     }
-    public void dispose() {}
+
+    public void dispose() {
+        for (Level l : levels) {
+            l.dispose();
+        }
+    }
 }

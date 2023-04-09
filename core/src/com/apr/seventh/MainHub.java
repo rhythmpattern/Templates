@@ -44,6 +44,6 @@ public class MainHub {
     }
     public void dispose()
     {
-
+        collection.dispose();
     }
 }
