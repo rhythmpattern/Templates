@@ -8,9 +8,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -41,8 +43,8 @@ public class Level1 implements Level{
     private int width = 21*16;
     private int height = 21*16;
 
-    static final int WORLD_WIDTH = 100;
-    static final int WORLD_HEIGHT = 100;
+    static final int WORLD_WIDTH = 1000;
+    static final int WORLD_HEIGHT = 1000;
     Story story;
     Tween tween;
     private ActionMessageHandler mh = new ActionMessageHandler();
@@ -55,10 +57,9 @@ public class Level1 implements Level{
     public void create(Collection bigGame) {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
-        camera = new OrthographicCamera(30,30*(h/w));
+        camera = new OrthographicCamera(600,600*(h/w));
         camera.position.x = 315;
         camera.position.y = 210;
-        camera.zoom = 20;
         camera.update();
         spriteBatch = new SpriteBatch();
 
@@ -70,14 +71,16 @@ public class Level1 implements Level{
         loader = new TmxMapLoader();
         map = loader.load("level1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
-        renderer.setView(camera);
+
         direction = new Vector2();
         MapObjects objects = map.getLayers().get("GameObjects").getObjects();
         for (MapObject object : objects)
         {
             if (object.getName().equals("player"))
             {
-                player = new Player(spriteBatch);
+                RectangleMapObject rectObj = (RectangleMapObject)object;
+                Rectangle rect = rectObj.getRectangle();
+                player = new Player(spriteBatch,rect.x,rect.y);
             }
         }
     }
@@ -100,8 +103,10 @@ public class Level1 implements Level{
         float h = Gdx.graphics.getHeight();
         Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        renderer.setView(camera);
+
         camera.update();
+        //renderer.setView(camera);
+        renderer.setView(camera);
         spriteBatch.setProjectionMatrix(camera.combined);
         renderer.render();
         spriteBatch.begin();
@@ -110,11 +115,9 @@ public class Level1 implements Level{
     }
     public void resize(int width, int height)
     {
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-       // width = width; height = height;
-        camera.viewportHeight = 30f*(h/w);
-        camera.viewportWidth = 30;
+        camera.viewportWidth = 600f;                 // Viewport of 30 units!
+        camera.viewportHeight = 600f * height/width; // Lets keep things in proportion.
+        camera.update();
     }
     public void dispose() {}
     public void CalledFunction() {

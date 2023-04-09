@@ -20,18 +20,19 @@ public class Player {
     private SpriteBatch spriteBatch;
 
     private Tween tween;
-    public Player(SpriteBatch sBatch)
+    public Player(SpriteBatch sBatch, float x, float y)
     {
         //Tween.to(sprite,3,1).target(-15,-15).ease(Elastic.INOUT)
         Gdx.app.log("", "CREATED PLAYER");
         spriteBatch = sBatch;
         sprite = new Sprite(new Texture(Gdx.files.internal("badlogic.jpg")));
-        sprite.setPosition(315f, 210f);
+        sprite.setSize(WIDTH,HEIGHT);
+        sprite.setPosition(x, y);
         Gdx.app.log("", "" + sprite.getHeight() + " " + sprite.getWidth());
     }
     public void draw()
     {
 
-        spriteBatch.draw(sprite,sprite.getX(),sprite.getY(),WIDTH,HEIGHT);
+        sprite.draw(spriteBatch);
     }
 }
