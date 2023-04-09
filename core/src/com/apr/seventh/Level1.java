@@ -80,7 +80,7 @@ public class Level1 implements Level{
             {
                 RectangleMapObject rectObj = (RectangleMapObject)object;
                 Rectangle rect = rectObj.getRectangle();
-                player = new Player(spriteBatch,rect.x,rect.y);
+                player = new Player(spriteBatch,rect);
             }
         }
     }

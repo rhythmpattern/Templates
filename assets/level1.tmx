@@ -26,7 +26,7 @@
 </data>
  </layer>
  <objectgroup id="2" name="GameObjects">
-  <object id="1" name="player" class="Player" x="546" y="231"/>
+  <object id="1" name="player" class="Player" x="21" y="168" width="42" height="42"/>
  </objectgroup>
  <objectgroup id="3" name="Physics">
   <object id="7" x="0" y="231" width="189" height="21"/>
