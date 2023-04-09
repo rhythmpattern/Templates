@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -29,6 +30,9 @@ public class Level1 implements Level{
     private TmxMapLoader loader;
     private OrthogonalTiledMapRenderer renderer;
     private Vector2 direction;
+
+    private int width = 21*16;
+    private int height = 21*16;
     Story story;
     Tween tween;
     private ActionMessageHandler mh = new ActionMessageHandler();
@@ -39,8 +43,10 @@ public class Level1 implements Level{
 
     }
     public void create(Collection bigGame) {
-        viewport = new ScreenViewport(camera);
+
         camera = new OrthographicCamera(21f*16f,21*16);
+        viewport = new ExtendViewport(200,200,camera);
+
         camera.position.x += 200;
         camera.position.y += 200;
         Gdx.app.log("debug","CREATED LEVEL1");
@@ -56,8 +62,9 @@ public class Level1 implements Level{
 
     public void update()
     {
-        camera.update();
 
+        camera.update();
+        viewport.update(width,height);
         boolean isPressed = Gdx.input.isKeyPressed(Input.Keys.D);
         if (isPressed)
         {
@@ -73,7 +80,7 @@ public class Level1 implements Level{
     }
     public void resize(int width, int height)
     {
-
+        width = width; height = height;
     }
     public void dispose() {}
     public void CalledFunction() {
