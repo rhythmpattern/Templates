@@ -1,6 +1,7 @@
 package com.apr.seventh;
 
 import static com.apr.seventh.Apr7.TILE_SIZE;
+import static com.apr.seventh.Apr7.mh;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -47,6 +48,22 @@ public class Player implements GameObject{
         sprite.setSize(WIDTH,HEIGHT);
         sprite.setPosition(r.x, r.y);
         Gdx.app.log("", "" + sprite.getHeight() + " " + sprite.getWidth());
+        Action moveaction = new MoveAction();
+        ActionData data = new ActionData(hashCode(),moveaction);
+        mh.Subscribe("move",data);
+    }
+
+    public class MoveAction implements Action {
+
+        @Override
+        public void create() {
+
+        }
+
+        @Override
+        public void invoke() {
+            Gdx.app.log("debug", "INVOKED MOVE ACTION");
+        }
     }
 
     public void update()

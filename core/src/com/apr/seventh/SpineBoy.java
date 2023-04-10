@@ -1,5 +1,7 @@
 package com.apr.seventh;
 
+import static com.apr.seventh.Apr7.mh;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -35,6 +37,7 @@ public class SpineBoy implements GameObject{
         // Queue the "walk" animation on the first track.
         state.setAnimation(0, "run", true);
         skeleton.setPosition(r.x,r.y);
+        mh.PostMessage("move");
     }
 
     public void update()

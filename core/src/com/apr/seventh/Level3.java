@@ -1,13 +1,8 @@
 package com.apr.seventh;
 
-import static com.apr.seventh.Apr7.mh;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -15,48 +10,38 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.bladecoder.ink.runtime.Story;
-import com.esotericsoftware.spine.utils.TwoColorPolygonBatch;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Vector;
 
-import aurelienribon.tweenengine.Tween;
-
-public class Level1 implements Level {
+public class Level3 implements Level{
     private Collection game = null;
     private Camera cam;
+
+    Viewport viewport;
+    private TiledMap map;
+    private TmxMapLoader loader;
+    private OrthogonalTiledMapRenderer renderer;
 
     private GameObject playerSpine;
     private GameObject playerSprite;
 
+    private ArrayList<GameObject> gameObjects;
+
     private int width = 21*16;
     private int height = 21*16;
+
+    private ActionMessageHandler mh = new ActionMessageHandler();
     private Action walk = new WalkAction();
     public ActionData aData = new ActionData(hashCode(),walk);
 
     private SpriteBatchRenderer mySpriteRenderer;
     private TwoColorRenderer mySpineRenderer;
 
-    TiledMap map;
-
-    Map myMap;
     private Vector<Renderer> myRenderers;
-
-    private OrthogonalTiledMapRenderer renderer;
-
-    public Level1()
-    {
-
-    }
+    public Level3(){}
+    @Override
     public void create(Collection bigGame) {
         cam = new Camera();
         cam.create();
@@ -67,15 +52,14 @@ public class Level1 implements Level {
         myRenderers.add((Renderer) mySpriteRenderer);
         myRenderers.add((Renderer) mySpineRenderer);
 
-        Gdx.app.log("debug","CREATED LEVEL1");
+        Gdx.app.log("debug","CREATED LEVEL3");
         game = bigGame;
         mh.Subscribe("start",aData);
         mh.PostMessage("start");
-        myMap = new Map();
-        myMap.create("level1.tmx");
-        map = myMap.GetMap();
-
+        loader = new TmxMapLoader();
+        map = loader.load("level3.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
+        gameObjects = new ArrayList<GameObject>();
         MapObjects objects = map.getLayers().get("GameObjects").getObjects();
         for (MapObject object : objects)
         {
@@ -85,6 +69,7 @@ public class Level1 implements Level {
                 Rectangle rect = rectObj.getRectangle();
                 playerSprite = new Player(mySpriteRenderer,rect);
                 mySpriteRenderer.add((GameObject) playerSprite);
+                gameObjects.add((GameObject)playerSprite);
             }
             if (object.getName().equals("spine-player"))
             {
@@ -92,21 +77,28 @@ public class Level1 implements Level {
                 Rectangle rect = rectObj.getRectangle();
                 playerSpine = new SpineBoy(mySpineRenderer,rect);
                 mySpineRenderer.add((GameObject) playerSpine);
+                gameObjects.add((GameObject)playerSpine);
             }
         }
     }
 
-    public void update()
-    {
-        playerSpine.update();
-        playerSprite.update();
-      //  viewport.update(width,height);
+    @Override
+    public void update() {
+        for (GameObject o : gameObjects)
+        {
+           o.update();
+        }
+        //  viewport.update(width,height);
 
         cam.update();
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q))
         {
             game.Next();
         }
+    }
+    public void resize(int width, int height)
+    {
+        cam.resize(width,height);
     }
     public void render()
     {
@@ -119,21 +111,14 @@ public class Level1 implements Level {
         mySpineRenderer.render();
         mySpriteRenderer.render();
     }
-    public void resize(int width, int height)
-    {
-        cam.resize(width,height);
-    }
-    public void dispose()
-    {
-        playerSpine.dispose(); playerSprite.dispose(); map.dispose();
-    }
-    public void CalledFunction()
-    {
-        Gdx.app.log("debug","CALLED FUNCTION");
-    }
-    /*public void CallFunction(String name) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
-        this.getClass().getDeclaredMethod(name).invoke(this);
-    }*/
+    @Override
+    public void dispose() {
+        for (GameObject o : gameObjects)
+        {
+            o.dispose();
 
+        }
+        map.dispose();
+    }
 }

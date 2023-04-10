@@ -1,6 +1,7 @@
 package com.apr.seventh;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class Camera {
@@ -12,6 +13,14 @@ public class Camera {
     }
     public void update()
     {
+        if (Gdx.input.isKeyPressed(Input.Keys.D))
+        {
+            camera.zoom +=0.1 ;
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.A))
+        {
+            camera.zoom -=0.1;
+        }
         camera.update();
     }
 

@@ -12,6 +12,8 @@ public class Game implements Collection {
     Level level1 = new Level1();
     Level level2 = new Level2();
 
+    Level level3 = new Level3();
+
     public void SetHub(MainHub hub) {
         mainHub = hub;
     }
@@ -20,12 +22,14 @@ public class Game implements Collection {
         Gdx.app.log("debug", "Created Game");
         levels.add(level1);
         levels.add(level2);
+        levels.add(level3);
         levels.get(level - 1).create(this);
     }
 
     public void Next() {
         levels.get(level - 1).dispose();
         level += 1;
+        if (level == 4) level = 1;
         levels.get(level - 1).create(this);
 
     }

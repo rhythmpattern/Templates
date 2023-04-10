@@ -10,6 +10,8 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Apr7 extends ApplicationAdapter {
 	static final int TILE_SIZE = 21;
+
+	static ActionMessageHandler mh = new ActionMessageHandler();
 	private MainHub mainHub = new MainHub();
 	@Override
 	public void create () {
