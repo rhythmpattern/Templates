@@ -10,7 +10,7 @@ public class WalkAction implements Action{
     }
 
     @Override
-    public void invoke() {
+    public void invoke(GameObject caller) {
         Gdx.app.log("","INVOKED WALK");
     }
 }

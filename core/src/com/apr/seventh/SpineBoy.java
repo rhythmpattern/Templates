@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Skeleton;
@@ -37,7 +38,12 @@ public class SpineBoy implements GameObject{
         // Queue the "walk" animation on the first track.
         state.setAnimation(0, "run", true);
         skeleton.setPosition(r.x,r.y);
-        mh.PostMessage("move");
+        mh.PostMessage("move",this);
+    }
+
+    public Vector2 GetPosition()
+    {
+        return new Vector2(skeleton.getX(),skeleton.getY());
     }
 
     public void update()

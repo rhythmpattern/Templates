@@ -12,10 +12,10 @@ public class ActionData {
         hashCode = hash;
         this.action = action;
     }
-    public void invoke()
+    public void invoke(GameObject caller)
     {
         if (action != null)
-            action.invoke();
+            action.invoke(caller);
     }
 
 }

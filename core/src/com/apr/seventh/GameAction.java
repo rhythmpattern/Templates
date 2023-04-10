@@ -5,11 +5,11 @@ import com.badlogic.gdx.utils.Array;
 //Equivalent to Unity action. For functions as first class objects.
 public class GameAction {
     Array<Action> actions = new Array<Action>();
-    public void invoke()
+    public void invoke(GameObject caller)
     {
         for (Action action : actions)
         {
-            action.invoke();
+            action.invoke(caller);
         }
     }
 }

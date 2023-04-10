@@ -19,14 +19,14 @@ public class ActionMessageHandler extends MessageHandlerStub{
         actions.get(name).put(actionData.hashCode(),actionData);
     }
     @ Override
-    public void PostMessage(String name)
+    public void PostMessage(String name, GameObject caller)
     {
         for (String entry: actions.keySet())
         {
             HashMap<Integer,ActionData> a1 = actions.get(entry);
             for (Integer innerEntry: a1.keySet())
             {
-                a1.get(innerEntry).invoke();
+                a1.get(innerEntry).invoke(caller);
             }
         }
     }

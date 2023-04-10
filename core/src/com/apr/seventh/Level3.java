@@ -55,7 +55,7 @@ public class Level3 implements Level{
         Gdx.app.log("debug","CREATED LEVEL3");
         game = bigGame;
         mh.Subscribe("start",aData);
-        mh.PostMessage("start");
+        mh.PostMessage("start",(GameObject) new EmptyGO());
         loader = new TmxMapLoader();
         map = loader.load("level3.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);

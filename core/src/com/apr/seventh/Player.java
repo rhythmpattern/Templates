@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Skeleton;
@@ -53,6 +54,11 @@ public class Player implements GameObject{
         mh.Subscribe("move",data);
     }
 
+    public Vector2 GetPosition()
+    {
+        return new Vector2(sprite.getX(),sprite.getY());
+    }
+
     public class MoveAction implements Action {
 
         @Override
@@ -61,8 +67,9 @@ public class Player implements GameObject{
         }
 
         @Override
-        public void invoke() {
+        public void invoke(GameObject caller) {
             Gdx.app.log("debug", "INVOKED MOVE ACTION");
+            //sprite.setPosition(caller.GetPosition().x + 100,caller.GetPosition().y);
         }
     }
 

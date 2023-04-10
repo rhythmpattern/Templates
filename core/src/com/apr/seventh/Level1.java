@@ -70,7 +70,7 @@ public class Level1 implements Level {
         Gdx.app.log("debug","CREATED LEVEL1");
         game = bigGame;
         mh.Subscribe("start",aData);
-        mh.PostMessage("start");
+        mh.PostMessage("start",(GameObject) new EmptyGO());
         myMap = new Map();
         myMap.create("level1.tmx");
         map = myMap.GetMap();
