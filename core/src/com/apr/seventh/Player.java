@@ -3,6 +3,7 @@ package com.apr.seventh;
 import static com.apr.seventh.Apr7.TILE_SIZE;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
@@ -34,12 +35,6 @@ public class Player implements GameObject{
     private float HEIGHT =  TILE_SIZE * 4;
     private SpriteBatch spriteBatch;
 
-    SkeletonRenderer skelRenderer = null;
-    TextureAtlas atlas;
-    Skeleton skeleton = null;
-    AnimationState state;
-    TwoColorPolygonBatch batch;
-
     private Tween tween;
     public Player(SpriteBatchRenderer rend, Rectangle r)
     {
@@ -53,39 +48,17 @@ public class Player implements GameObject{
         sprite.setPosition(r.x, r.y);
         Gdx.app.log("", "" + sprite.getHeight() + " " + sprite.getWidth());
     }
-    public Player(TwoColorRenderer rend, Rectangle r)
-    {
-        batch = new TwoColorPolygonBatch();
-        skelRenderer = new SkeletonRenderer();
-        atlas = new TextureAtlas(Gdx.files.internal("spineboy-pro.atlas"));
-        SkeletonBinary json = new SkeletonBinary(atlas);
-        json.setScale(0.1f);
-        SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal("spineboy-pro.skel"));
-        AnimationStateData stateData = new AnimationStateData(skeletonData);
-        state = new AnimationState(stateData);
-        batch = rend.GetBatch();
-        skeleton = new Skeleton(skeletonData);
-        // Queue the "walk" animation on the first track.
-        state.setAnimation(0, "run", true);
-        skeleton.setPosition(r.x,r.y);
-    }
+
     public void update()
     {
-        if (skeleton != null)
-        {
-            state.update(Gdx.graphics.getDeltaTime());
-            state.apply(skeleton);
-            skeleton.updateWorldTransform();
-        }
+
+
+
 
     }
     public void render()
     {
-        if (skelRenderer != null)
-        {
 
-            skelRenderer.draw(batch,skeleton);
-        }
         if (sprite != null)
         {
             sprite.draw(spriteBatch);

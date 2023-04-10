@@ -28,9 +28,9 @@ import java.util.Vector;
 
 import aurelienribon.tweenengine.Tween;
 
-public class Level1 implements Level{
+public class Level1 implements Level {
     private Collection game = null;
-    private OrthographicCamera camera;
+    private Camera cam;
 
     Viewport viewport;
     private TiledMap map;
@@ -38,10 +38,8 @@ public class Level1 implements Level{
     private OrthogonalTiledMapRenderer renderer;
     private Vector2 direction;
 
-    private Player playerSpine;
-    private Player playerSprite;
-
-    private TwoColorPolygonBatch spriteBatch;
+    private GameObject playerSpine;
+    private GameObject playerSprite;
 
     private int width = 21*16;
     private int height = 21*16;
@@ -63,14 +61,8 @@ public class Level1 implements Level{
 
     }
     public void create(Collection bigGame) {
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-        camera = new OrthographicCamera(300,300*(h/w));
-        camera.position.x = 315;
-        camera.position.y = 210;
-        camera.update();
-        spriteBatch = new TwoColorPolygonBatch();
-
+        cam = new Camera();
+        cam.create();
         //Create the renderers
         myRenderers = new Vector<Renderer>(2);
         mySpriteRenderer =  new SpriteBatchRenderer();
@@ -101,7 +93,7 @@ public class Level1 implements Level{
             {
                 RectangleMapObject rectObj = (RectangleMapObject)object;
                 Rectangle rect = rectObj.getRectangle();
-                playerSpine = new Player(mySpineRenderer,rect);
+                playerSpine = new SpineBoy(mySpineRenderer,rect);
                 mySpineRenderer.add((GameObject) playerSpine);
             }
         }
@@ -109,35 +101,18 @@ public class Level1 implements Level{
 
     public void update()
     {
-
-
         playerSpine.update();
         playerSprite.update();
       //  viewport.update(width,height);
         if (Gdx.input.isKeyPressed(Input.Keys.D))
         {
-            camera.zoom +=0.1 ;
+            cam.GetCamera().zoom +=0.1 ;
         }
         else if (Gdx.input.isKeyPressed(Input.Keys.A))
         {
-            camera.zoom -=0.1;
+            cam.GetCamera().zoom -=0.1;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-        {
-            camera.position.x -= 10;
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-        {
-            camera.position.x += 10;
-        }
-         if (Gdx.input.isKeyPressed(Input.Keys.UP))
-        {
-            camera.position.y += 10;
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-        {
-            camera.position.y -= 10;
-        }
+        cam.update();
     }
     public void render()
     {
@@ -146,23 +121,25 @@ public class Level1 implements Level{
         Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update();
-        renderer.setView(camera);
-        mySpineRenderer.SetProjection(camera);
-        mySpriteRenderer.SetProjection(camera);
+        renderer.setView(cam.GetCamera());
+        mySpineRenderer.SetProjection(cam.GetCamera());
+        mySpriteRenderer.SetProjection(cam.GetCamera());
         renderer.render();
         mySpineRenderer.render();
         mySpriteRenderer.render();
     }
     public void resize(int width, int height)
     {
-        camera.viewportWidth = 300f;                 // Viewport of 30 units!
-        camera.viewportHeight = 300f * height/width; // Lets keep things in proportion.
-        camera.update();
+        cam.resize(width,height);
     }
-    public void dispose() {playerSpine.dispose(); playerSprite.dispose(); map.dispose();}
-    public void CalledFunction() {
-        Gdx.app.log("debug","CALLED FUNCTION");}
+    public void dispose()
+    {
+        playerSpine.dispose(); playerSprite.dispose(); map.dispose();
+    }
+    public void CalledFunction()
+    {
+        Gdx.app.log("debug","CALLED FUNCTION");
+    }
     /*public void CallFunction(String name) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
         this.getClass().getDeclaredMethod(name).invoke(this);
