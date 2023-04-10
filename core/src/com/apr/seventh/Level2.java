@@ -1,5 +1,7 @@
 package com.apr.seventh;
 
+import static com.apr.seventh.Apr7.mh;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -15,34 +17,39 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.spine.utils.TwoColorPolygonBatch;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class Level2 implements Level{
     private Collection game = null;
     private Camera cam;
 
-    Viewport viewport;
-    private TiledMap map;
-    private TmxMapLoader loader;
-    private OrthogonalTiledMapRenderer renderer;
-
     private GameObject playerSpine;
     private GameObject playerSprite;
 
+    private ArrayList<GameObject> gameObjects;
+
     private int width = 21*16;
     private int height = 21*16;
-
-    private ActionMessageHandler mh = new ActionMessageHandler();
     private Action walk = new WalkAction();
     public ActionData aData = new ActionData(hashCode(),walk);
 
     private SpriteBatchRenderer mySpriteRenderer;
     private TwoColorRenderer mySpineRenderer;
 
+    TiledMap map;
+
+    Map myMap;
     private Vector<Renderer> myRenderers;
-    public Level2(){}
-    @Override
+
+    private OrthogonalTiledMapRenderer renderer;
+
+    public Level2()
+    {
+
+    }
     public void create(Collection bigGame) {
+        gameObjects = new ArrayList<GameObject>();
         cam = new Camera();
         cam.create();
         //Create the renderers
@@ -56,10 +63,11 @@ public class Level2 implements Level{
         game = bigGame;
         mh.Subscribe("start",aData);
         mh.PostMessage("start",(GameObject) new EmptyGO());
-        loader = new TmxMapLoader();
-        map = loader.load("level2.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map);
+        myMap = new Map();
+        myMap.create("level2.tmx");
+        map = myMap.GetMap();
 
+        renderer = new OrthogonalTiledMapRenderer(map);
         MapObjects objects = map.getLayers().get("GameObjects").getObjects();
         for (MapObject object : objects)
         {
@@ -68,22 +76,24 @@ public class Level2 implements Level{
                 RectangleMapObject rectObj = (RectangleMapObject)object;
                 Rectangle rect = rectObj.getRectangle();
                 playerSprite = new Player(mySpriteRenderer,rect);
-                mySpriteRenderer.add((GameObject) playerSprite);
+                gameObjects.add(playerSprite);
             }
             if (object.getName().equals("spine-player"))
             {
                 RectangleMapObject rectObj = (RectangleMapObject)object;
                 Rectangle rect = rectObj.getRectangle();
                 playerSpine = new SpineBoy(mySpineRenderer,rect);
-                mySpineRenderer.add((GameObject) playerSpine);
+                gameObjects.add(playerSpine);
             }
         }
     }
 
-    @Override
-    public void update() {
-        playerSpine.update();
-        playerSprite.update();
+    public void update()
+    {
+        for (GameObject o : gameObjects)
+        {
+            o.update();
+        }
         //  viewport.update(width,height);
 
         cam.update();
@@ -91,10 +101,6 @@ public class Level2 implements Level{
         {
             game.Next();
         }
-    }
-    public void resize(int width, int height)
-    {
-        cam.resize(width,height);
     }
     public void render()
     {
@@ -107,11 +113,25 @@ public class Level2 implements Level{
         mySpineRenderer.render();
         mySpriteRenderer.render();
     }
-
-    @Override
-    public void dispose() {
-        playerSpine.dispose();
-        playerSprite.dispose();
+    public void resize(int width, int height)
+    {
+        cam.resize(width,height);
+    }
+    public void dispose()
+    {
+        for (GameObject o : gameObjects)
+        {
+            o.dispose();
+        }
         map.dispose();
     }
+    public void CalledFunction()
+    {
+        Gdx.app.log("debug","CALLED FUNCTION");
+    }
+    /*public void CallFunction(String name) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+
+        this.getClass().getDeclaredMethod(name).invoke(this);
+    }*/
+
 }

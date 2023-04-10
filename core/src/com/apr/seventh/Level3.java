@@ -1,5 +1,7 @@
 package com.apr.seventh;
 
+import static com.apr.seventh.Apr7.mh;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
@@ -19,11 +21,6 @@ public class Level3 implements Level{
     private Collection game = null;
     private Camera cam;
 
-    Viewport viewport;
-    private TiledMap map;
-    private TmxMapLoader loader;
-    private OrthogonalTiledMapRenderer renderer;
-
     private GameObject playerSpine;
     private GameObject playerSprite;
 
@@ -31,18 +28,25 @@ public class Level3 implements Level{
 
     private int width = 21*16;
     private int height = 21*16;
-
-    private ActionMessageHandler mh = new ActionMessageHandler();
     private Action walk = new WalkAction();
     public ActionData aData = new ActionData(hashCode(),walk);
 
     private SpriteBatchRenderer mySpriteRenderer;
     private TwoColorRenderer mySpineRenderer;
 
+    TiledMap map;
+
+    Map myMap;
     private Vector<Renderer> myRenderers;
-    public Level3(){}
-    @Override
+
+    private OrthogonalTiledMapRenderer renderer;
+
+    public Level3()
+    {
+
+    }
     public void create(Collection bigGame) {
+        gameObjects = new ArrayList<GameObject>();
         cam = new Camera();
         cam.create();
         //Create the renderers
@@ -52,14 +56,15 @@ public class Level3 implements Level{
         myRenderers.add((Renderer) mySpriteRenderer);
         myRenderers.add((Renderer) mySpineRenderer);
 
-        Gdx.app.log("debug","CREATED LEVEL3");
+        Gdx.app.log("debug","CREATED LEVEL1");
         game = bigGame;
         mh.Subscribe("start",aData);
         mh.PostMessage("start",(GameObject) new EmptyGO());
-        loader = new TmxMapLoader();
-        map = loader.load("level3.tmx");
+        myMap = new Map();
+        myMap.create("level3.tmx");
+        map = myMap.GetMap();
+
         renderer = new OrthogonalTiledMapRenderer(map);
-        gameObjects = new ArrayList<GameObject>();
         MapObjects objects = map.getLayers().get("GameObjects").getObjects();
         for (MapObject object : objects)
         {
@@ -68,25 +73,23 @@ public class Level3 implements Level{
                 RectangleMapObject rectObj = (RectangleMapObject)object;
                 Rectangle rect = rectObj.getRectangle();
                 playerSprite = new Player(mySpriteRenderer,rect);
-                mySpriteRenderer.add((GameObject) playerSprite);
-                gameObjects.add((GameObject)playerSprite);
+                gameObjects.add(playerSprite);
             }
             if (object.getName().equals("spine-player"))
             {
                 RectangleMapObject rectObj = (RectangleMapObject)object;
                 Rectangle rect = rectObj.getRectangle();
                 playerSpine = new SpineBoy(mySpineRenderer,rect);
-                mySpineRenderer.add((GameObject) playerSpine);
-                gameObjects.add((GameObject)playerSpine);
+                gameObjects.add(playerSpine);
             }
         }
     }
 
-    @Override
-    public void update() {
+    public void update()
+    {
         for (GameObject o : gameObjects)
         {
-           o.update();
+            o.update();
         }
         //  viewport.update(width,height);
 
@@ -95,10 +98,6 @@ public class Level3 implements Level{
         {
             game.Next();
         }
-    }
-    public void resize(int width, int height)
-    {
-        cam.resize(width,height);
     }
     public void render()
     {
@@ -111,14 +110,25 @@ public class Level3 implements Level{
         mySpineRenderer.render();
         mySpriteRenderer.render();
     }
-
-    @Override
-    public void dispose() {
+    public void resize(int width, int height)
+    {
+        cam.resize(width,height);
+    }
+    public void dispose()
+    {
         for (GameObject o : gameObjects)
         {
             o.dispose();
-
         }
         map.dispose();
     }
+    public void CalledFunction()
+    {
+        Gdx.app.log("debug","CALLED FUNCTION");
+    }
+    /*public void CallFunction(String name) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+
+        this.getClass().getDeclaredMethod(name).invoke(this);
+    }*/
+
 }

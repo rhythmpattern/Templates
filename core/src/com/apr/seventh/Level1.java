@@ -38,6 +38,8 @@ public class Level1 implements Level {
     private GameObject playerSpine;
     private GameObject playerSprite;
 
+    private ArrayList<GameObject> gameObjects;
+
     private int width = 21*16;
     private int height = 21*16;
     private Action walk = new WalkAction();
@@ -58,6 +60,7 @@ public class Level1 implements Level {
 
     }
     public void create(Collection bigGame) {
+        gameObjects = new ArrayList<GameObject>();
         cam = new Camera();
         cam.create();
         //Create the renderers
@@ -84,22 +87,24 @@ public class Level1 implements Level {
                 RectangleMapObject rectObj = (RectangleMapObject)object;
                 Rectangle rect = rectObj.getRectangle();
                 playerSprite = new Player(mySpriteRenderer,rect);
-                mySpriteRenderer.add((GameObject) playerSprite);
+                gameObjects.add(playerSprite);
             }
             if (object.getName().equals("spine-player"))
             {
                 RectangleMapObject rectObj = (RectangleMapObject)object;
                 Rectangle rect = rectObj.getRectangle();
                 playerSpine = new SpineBoy(mySpineRenderer,rect);
-                mySpineRenderer.add((GameObject) playerSpine);
+                gameObjects.add(playerSpine);
             }
         }
     }
 
     public void update()
     {
-        playerSpine.update();
-        playerSprite.update();
+        for (GameObject o : gameObjects)
+        {
+            o.update();
+        }
       //  viewport.update(width,height);
 
         cam.update();
@@ -125,7 +130,11 @@ public class Level1 implements Level {
     }
     public void dispose()
     {
-        playerSpine.dispose(); playerSprite.dispose(); map.dispose();
+        for (GameObject o : gameObjects)
+        {
+            o.dispose();
+        }
+        map.dispose();
     }
     public void CalledFunction()
     {

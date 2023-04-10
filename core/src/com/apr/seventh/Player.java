@@ -52,6 +52,7 @@ public class Player implements GameObject{
         Action moveaction = new MoveAction();
         ActionData data = new ActionData(hashCode(),moveaction);
         mh.Subscribe("move",data);
+        rend.add(this);
     }
 
     public Vector2 GetPosition()

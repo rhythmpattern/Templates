@@ -39,6 +39,7 @@ public class SpineBoy implements GameObject{
         state.setAnimation(0, "run", true);
         skeleton.setPosition(r.x,r.y);
         mh.PostMessage("move",this);
+        rend.add(this);
     }
 
     public Vector2 GetPosition()
