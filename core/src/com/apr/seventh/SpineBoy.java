@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.AnimationStateData;
+import com.esotericsoftware.spine.Bone;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonBinary;
 import com.esotericsoftware.spine.SkeletonData;
@@ -28,6 +29,8 @@ public class SpineBoy implements GameObject, InputProcessor{
     Vector2 targetPos;
     float factor = 1f;
 
+    Vector2 boneCoords = new Vector2();
+
     public SpineBoy(TwoColorRenderer rend, Rectangle r)
     {
         Gdx.input.setInputProcessor(this);
@@ -43,6 +46,7 @@ public class SpineBoy implements GameObject, InputProcessor{
         skeleton = new Skeleton(skeletonData);
         // Queue the "walk" animation on the first track.
         state.setAnimation(0, "run", true);
+        state.setAnimation(1,"aim",true);
         skeleton.setPosition(r.x,r.y);
         targetPos = new Vector2(r.x,r.y);
         mh.PostMessage("move",this);
@@ -57,8 +61,8 @@ public class SpineBoy implements GameObject, InputProcessor{
     public void update()
     {
         Vector2 error = new Vector2((targetPos.x - skeleton.getX())*factor, factor* (targetPos.y - skeleton.getY()));
-        skeleton.setX(skeleton.getX() + error.x * Gdx.graphics.getDeltaTime());
-        skeleton.setY(skeleton.getY() + error.y * Gdx.graphics.getDeltaTime());
+       // skeleton.setX(skeleton.getX() + error.x * Gdx.graphics.getDeltaTime());
+        //skeleton.setY(skeleton.getY() + error.y * Gdx.graphics.getDeltaTime());
         if (skeleton != null)
         {
 
@@ -120,7 +124,12 @@ public class SpineBoy implements GameObject, InputProcessor{
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector3 touchPos = Camera.Screen2World(new Vector2(screenX,screenY));
         targetPos = new Vector2(touchPos.x,touchPos.y);
-        Gdx.app.log("","TOUCHING" + touchPos.x + " " + touchPos.y);
+        Bone crosshair = skeleton.findBone("crosshair"); // Should be cached.
+
+        boneCoords.set(targetPos.x, targetPos.y);
+        crosshair.getParent().worldToLocal(boneCoords); // camera space to local bone space
+        crosshair.setPosition(boneCoords.x, boneCoords.y); // override the crosshair position
+        state.setAnimation(3,"shoot",false)   ;
         return false;
     }
 
