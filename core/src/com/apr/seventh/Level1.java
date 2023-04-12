@@ -35,9 +35,6 @@ public class Level1 implements Level {
     private Collection game = null;
     private Camera cam;
 
-    private GameObject playerSpine;
-    private GameObject playerSprite;
-
     private ArrayList<GameObject> gameObjects;
 
     private int width = 21*16;
@@ -48,19 +45,14 @@ public class Level1 implements Level {
     private SpriteBatchRenderer mySpriteRenderer;
     private TwoColorRenderer mySpineRenderer;
 
-    TiledMap map;
-
     Map myMap;
     private Vector<Renderer> myRenderers;
-
-    private OrthogonalTiledMapRenderer renderer;
 
     public Level1()
     {
 
     }
     public void create(Collection bigGame) {
-        gameObjects = new ArrayList<GameObject>();
         cam = new Camera();
         cam.create();
         //Create the renderers
@@ -75,28 +67,8 @@ public class Level1 implements Level {
         mh.Subscribe("start",aData);
         mh.PostMessage("start",(GameObject) new EmptyGO());
         myMap = new Map();
-        myMap.create("level1.tmx");
-        map = myMap.GetMap();
+        gameObjects = myMap.create("level1.tmx", cam, mySpriteRenderer,mySpineRenderer);
 
-        renderer = new OrthogonalTiledMapRenderer(map);
-        MapObjects objects = map.getLayers().get("GameObjects").getObjects();
-        for (MapObject object : objects)
-        {
-            if (object.getName().equals("player"))
-            {
-                RectangleMapObject rectObj = (RectangleMapObject)object;
-                Rectangle rect = rectObj.getRectangle();
-                playerSprite = new Player(mySpriteRenderer,rect);
-                gameObjects.add(playerSprite);
-            }
-            if (object.getName().equals("spine-player"))
-            {
-                RectangleMapObject rectObj = (RectangleMapObject)object;
-                Rectangle rect = rectObj.getRectangle();
-                playerSpine = new SpineBoy(mySpineRenderer,rect);
-                gameObjects.add(playerSpine);
-            }
-        }
     }
 
     public void update()
@@ -117,10 +89,10 @@ public class Level1 implements Level {
     {
         Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        renderer.setView(cam.GetCamera());
+
         mySpineRenderer.SetProjection(cam.GetCamera());
         mySpriteRenderer.SetProjection(cam.GetCamera());
-        renderer.render();
+        myMap.render();
         mySpineRenderer.render();
         mySpriteRenderer.render();
     }
@@ -134,7 +106,7 @@ public class Level1 implements Level {
         {
             o.dispose();
         }
-        map.dispose();
+        myMap.dispose();
     }
     public void CalledFunction()
     {

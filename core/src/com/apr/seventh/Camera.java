@@ -3,9 +3,11 @@ package com.apr.seventh;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public class Camera {
-    OrthographicCamera camera;
+    static public OrthographicCamera camera;
 
     public Camera()
     {
@@ -39,6 +41,11 @@ public class Camera {
         camera.viewportWidth = 300f;                 // Viewport of 30 units!
         camera.viewportHeight = 300f * height/width; // Lets keep things in proportion.
         camera.update();
+    }
+
+     static public Vector3 Screen2World(Vector2 screen)
+    {
+        return camera.unproject(new Vector3(screen.x,screen.y,0));
     }
 
     public OrthographicCamera GetCamera()

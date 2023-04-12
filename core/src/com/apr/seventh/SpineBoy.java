@@ -4,9 +4,11 @@ import static com.apr.seventh.Apr7.mh;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Skeleton;
@@ -15,7 +17,7 @@ import com.esotericsoftware.spine.SkeletonData;
 import com.esotericsoftware.spine.SkeletonRenderer;
 import com.esotericsoftware.spine.utils.TwoColorPolygonBatch;
 
-public class SpineBoy implements GameObject{
+public class SpineBoy implements GameObject, InputProcessor{
 
     SkeletonRenderer skelRenderer = null;
     TextureAtlas atlas;
@@ -23,8 +25,12 @@ public class SpineBoy implements GameObject{
     AnimationState state;
     TwoColorPolygonBatch batch;
 
+    Vector2 targetPos;
+    float factor = 1f;
+
     public SpineBoy(TwoColorRenderer rend, Rectangle r)
     {
+        Gdx.input.setInputProcessor(this);
         batch = new TwoColorPolygonBatch();
         skelRenderer = new SkeletonRenderer();
         atlas = new TextureAtlas(Gdx.files.internal("spineboy-pro.atlas"));
@@ -38,6 +44,7 @@ public class SpineBoy implements GameObject{
         // Queue the "walk" animation on the first track.
         state.setAnimation(0, "run", true);
         skeleton.setPosition(r.x,r.y);
+        targetPos = new Vector2(r.x,r.y);
         mh.PostMessage("move",this);
         rend.add(this);
     }
@@ -49,11 +56,15 @@ public class SpineBoy implements GameObject{
 
     public void update()
     {
+        Vector2 error = new Vector2((targetPos.x - skeleton.getX())*factor, factor* (targetPos.y - skeleton.getY()));
+        skeleton.setX(skeleton.getX() + error.x * Gdx.graphics.getDeltaTime());
+        skeleton.setY(skeleton.getY() + error.y * Gdx.graphics.getDeltaTime());
         if (skeleton != null)
         {
 
             if (Gdx.input.isTouched())
             {
+
             }
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
             {
@@ -88,5 +99,48 @@ public class SpineBoy implements GameObject{
     public void dispose()
     {
         atlas.dispose();
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        Vector3 touchPos = Camera.Screen2World(new Vector2(screenX,screenY));
+        targetPos = new Vector2(touchPos.x,touchPos.y);
+        Gdx.app.log("","TOUCHING" + touchPos.x + " " + touchPos.y);
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+        return false;
     }
 }
